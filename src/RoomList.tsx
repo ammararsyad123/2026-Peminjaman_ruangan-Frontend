@@ -41,7 +41,10 @@ const RoomList = () => {
         ...roomToUpdate,
         capacity: newCapacity
       })
-      .then(() => fetchRooms())
+      .then(() => {
+        if (newCapacity !== 0) localStorage.removeItem(`booking_info_${id}`);
+        fetchRooms();
+      })
       .catch(err => console.error("Gagal update status:", err));
     }
   };
@@ -50,6 +53,7 @@ const RoomList = () => {
     if (window.confirm("Apakah Anda yakin ingin menghapus ruangan ini?")) {
       axios.delete(`http://localhost:5025/api/Rooms/${id}`)
         .then(() => {
+          localStorage.removeItem(`booking_info_${id}`);
           alert("Ruangan berhasil dihapus!");
           fetchRooms();
         })
@@ -86,9 +90,8 @@ const RoomList = () => {
           <table className="table table-hover mb-0">
             <thead style={{ background: '#f8f9fa' }}>
               <tr>
-                <th className="px-4 py-3 border-0 text-muted small text-uppercase">Nama Ruangan</th>
-                <th className="py-3 border-0 text-muted small text-uppercase">Lokasi</th>
-                {/* TAMBAHAN POIN 3: Kolom Informasi Jadwal */}
+                <th className="px-4 py-3 border-0 text-muted small text-uppercase text-start">Nama Ruangan</th>
+                <th className="py-3 border-0 text-muted small text-uppercase text-start">Lokasi</th>
                 <th className="py-3 border-0 text-muted small text-uppercase text-center">Informasi Booking</th>
                 <th className="py-3 border-0 text-muted small text-uppercase text-center">Status</th>
                 <th className="py-3 border-0 text-muted small text-uppercase text-center">Aksi</th>
@@ -97,21 +100,20 @@ const RoomList = () => {
             <tbody>
               {filteredRooms.map((room) => (
                 <tr key={room.id} className="align-middle">
-                  <td className="px-4 py-3 fw-semibold">{room.name}</td>
-                  <td className="py-3 text-secondary">{room.location}</td>
-                  
-                  {/* Tampilan Detail Booking */}
+                  <td className="px-4 py-3 fw-semibold text-start">{room.name}</td>
+                  <td className="py-3 text-secondary text-start">{room.location}</td>
                   <td className="py-3 text-center">
                     {room.capacity === 0 ? (
                       <div className="small">
                         <span className="badge bg-danger-subtle text-danger d-block mb-1">Terpakai</span>
-                        <span className="text-muted" style={{ fontSize: '11px' }}>16 Feb | 10:00 - 12:00</span>
+                        <span className="text-muted" style={{ fontSize: '11px' }}>
+                          {localStorage.getItem(`booking_info_${room.id}`) || "Terjadwal"}
+                        </span>
                       </div>
                     ) : (
                       <span className="text-success small fw-bold">Siap di Booking</span>
                     )}
                   </td>
-
                   <td className="py-3 text-center">
                     <span className={`badge rounded-pill px-3 py-2 ${room.capacity === 0 ? 'bg-warning-subtle text-warning' : 'bg-success-subtle text-success'}`} style={{ fontSize: '0.75rem' }}>
                       ● {room.capacity === 0 ? 'Dipinjam' : 'Tersedia'}
@@ -121,19 +123,12 @@ const RoomList = () => {
                     <button className="btn btn-light btn-sm me-2 shadow-sm rounded-3 fw-bold text-success" onClick={() => toggleStatus(room.id, room.capacity)}>
                       {room.capacity === 0 ? 'Selesai' : 'Pinjam'}
                     </button>
-                    <button className="btn btn-outline-danger btn-sm rounded-3" onClick={() => deleteRoom(room.id)}>
-                      Hapus
-                    </button>
+                    <button className="btn btn-outline-danger btn-sm rounded-3" onClick={() => deleteRoom(room.id)}>Hapus</button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-          {filteredRooms.length === 0 && (
-            <div className="text-center py-5">
-              <p className="text-muted mb-0">Tidak ada ruangan ditemukan.</p>
-            </div>
-          )}
         </div>
       </div>
     </div>
@@ -141,3 +136,4 @@ const RoomList = () => {
 };
 
 export default RoomList;
+
