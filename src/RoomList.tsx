@@ -18,13 +18,13 @@ const RoomList = () => {
   }, []);
 
 return (
-  <div className="container mt-5">
+  <div className="container-fluid mt-5">
     <div className="card shadow">
       <div className="card-header bg-primary text-white">
         <h3 className="mb-0">Daftar Ruangan PENS</h3>
       </div>
       <div className="card-body">
-        <table className="table table-hover table-striped">
+        <table className="table table-hover table-striped w-100">
           <thead className="table-dark">
             <tr>
               <th>ID</th>
