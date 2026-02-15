@@ -38,8 +38,8 @@ const RoomList = () => {
     
     if (roomToUpdate) {
       axios.put(`http://localhost:5025/api/Rooms/${id}`, { 
-        ...roomToUpdate, // Copy data lama
-        capacity: newCapacity // Update hanya capacity
+        ...roomToUpdate,
+        capacity: newCapacity
       })
       .then(() => fetchRooms())
       .catch(err => console.error("Gagal update status:", err));
@@ -59,8 +59,8 @@ const RoomList = () => {
 
   return (
     <div className="card border-0 shadow-sm mb-4" style={{ borderRadius: '15px', overflow: 'hidden' }}>
-      <div className="card-header border-0 py-3 bg-white">
-        <h5 className="mb-0 fw-bold" style={{ color: '#166534' }}>Dashboard Pengelolaan Ruangan</h5>
+      <div className="card-header border-0 py-3 bg-white text-center">
+        <h5 className="mb-0 fw-bold" style={{ color: '#166534' }}>Dashboard Pengelolaan & Booking Ruangan</h5>
       </div>
       
       <div className="card-body p-4 pt-0">
@@ -88,6 +88,8 @@ const RoomList = () => {
               <tr>
                 <th className="px-4 py-3 border-0 text-muted small text-uppercase">Nama Ruangan</th>
                 <th className="py-3 border-0 text-muted small text-uppercase">Lokasi</th>
+                {/* TAMBAHAN POIN 3: Kolom Informasi Jadwal */}
+                <th className="py-3 border-0 text-muted small text-uppercase text-center">Informasi Booking</th>
                 <th className="py-3 border-0 text-muted small text-uppercase text-center">Status</th>
                 <th className="py-3 border-0 text-muted small text-uppercase text-center">Aksi</th>
               </tr>
@@ -97,15 +99,27 @@ const RoomList = () => {
                 <tr key={room.id} className="align-middle">
                   <td className="px-4 py-3 fw-semibold">{room.name}</td>
                   <td className="py-3 text-secondary">{room.location}</td>
+                  
+                  {/* Tampilan Detail Booking */}
+                  <td className="py-3 text-center">
+                    {room.capacity === 0 ? (
+                      <div className="small">
+                        <span className="badge bg-danger-subtle text-danger d-block mb-1">Terpakai</span>
+                        <span className="text-muted" style={{ fontSize: '11px' }}>16 Feb | 10:00 - 12:00</span>
+                      </div>
+                    ) : (
+                      <span className="text-success small fw-bold">Siap di Booking</span>
+                    )}
+                  </td>
+
                   <td className="py-3 text-center">
                     <span className={`badge rounded-pill px-3 py-2 ${room.capacity === 0 ? 'bg-warning-subtle text-warning' : 'bg-success-subtle text-success'}`} style={{ fontSize: '0.75rem' }}>
                       ● {room.capacity === 0 ? 'Dipinjam' : 'Tersedia'}
                     </span>
                   </td>
                   <td className="py-3 text-center">
-                    {/* REVISI: Pastikan pemanggilan fungsi onClick sudah benar */}
                     <button className="btn btn-light btn-sm me-2 shadow-sm rounded-3 fw-bold text-success" onClick={() => toggleStatus(room.id, room.capacity)}>
-                      {room.capacity === 0 ? 'Set Tersedia' : 'Set Dipinjam'}
+                      {room.capacity === 0 ? 'Selesai' : 'Pinjam'}
                     </button>
                     <button className="btn btn-outline-danger btn-sm rounded-3" onClick={() => deleteRoom(room.id)}>
                       Hapus
@@ -117,7 +131,7 @@ const RoomList = () => {
           </table>
           {filteredRooms.length === 0 && (
             <div className="text-center py-5">
-              <p className="text-muted mb-0">Tidak ada ruangan yang cocok dengan filter kamu.</p>
+              <p className="text-muted mb-0">Tidak ada ruangan ditemukan.</p>
             </div>
           )}
         </div>
