@@ -50,39 +50,37 @@ const RoomList = () => {
     }
   };
 
-  return (
-    <div className="card shadow">
-      <div className="card-header bg-primary text-white">
-        <h3 className="mb-0">Daftar Pengelolaan Ruangan PENS</h3>
-      </div>
-      <div className="card-body">
-        <table className="table table-hover table-striped w-100">
-          <thead className="table-dark">
+ return (
+  <div className="card border-0 shadow-sm mb-4" style={{ borderRadius: '15px', overflow: 'hidden' }}>
+    <div className="card-header border-0 py-3" style={{ background: '#ffffff' }}>
+      <h5 className="mb-0 fw-bold" style={{ color: '#4a90e2' }}>Dashboard Pengelolaan Ruangan</h5>
+    </div>
+    <div className="card-body p-0">
+      <div className="table-responsive">
+        <table className="table table-hover mb-0">
+          <thead style={{ background: '#f8f9fa' }}>
             <tr>
-              <th>Nama Ruangan</th>
-              <th>Lokasi</th>
-              <th>Status</th> {/* Kolom Baru sesuai instruksi */}
-              <th>Aksi</th>
+              <th className="px-4 py-3 border-0 text-muted small text-uppercase">Nama Ruangan</th>
+              <th className="py-3 border-0 text-muted small text-uppercase">Lokasi</th>
+              <th className="py-3 border-0 text-muted small text-uppercase">Status</th>
+              <th className="py-3 border-0 text-muted small text-uppercase text-center">Aksi</th>
             </tr>
           </thead>
           <tbody>
             {rooms.map((room) => (
-              <tr key={room.id}>
-                <td>{room.name}</td>
-                <td>{room.location}</td>
-                <td>
-                  <span className={`badge ${room.capacity === 0 ? 'bg-warning' : 'bg-success'}`}>
-                    {room.capacity === 0 ? 'Dipinjam' : 'Tersedia'}
+              <tr key={room.id} className="align-middle">
+                <td className="px-4 py-3 fw-semibold">{room.name}</td>
+                <td className="py-3 text-secondary">{room.location}</td>
+                <td className="py-3">
+                  <span className={`badge rounded-pill px-3 py-2 ${room.capacity === 0 ? 'bg-warning-subtle text-warning' : 'bg-success-subtle text-success'}`} style={{ fontSize: '0.75rem' }}>
+                    ● {room.capacity === 0 ? 'Dipinjam' : 'Tersedia'}
                   </span>
                 </td>
-                <td>
-                  <button 
-                    className="btn btn-info btn-sm me-2" 
-                    onClick={() => toggleStatus(room.id, room.capacity === 0 ? 'Dipinjam' : 'Tersedia')}
-                  >
-                    Ubah Status
+                <td className="py-3 text-center">
+                  <button className="btn btn-light btn-sm me-2 shadow-sm rounded-3" onClick={() => toggleStatus(room.id, room.capacity === 0 ? 'Dipinjam' : 'Tersedia')}>
+                    <i className="bi bi-arrow-repeat"></i> Ubah Status
                   </button>
-                  <button className="btn btn-danger btn-sm" onClick={() => deleteRoom(room.id)}>
+                  <button className="btn btn-outline-danger btn-sm rounded-3" onClick={() => deleteRoom(room.id)}>
                     Hapus
                   </button>
                 </td>
@@ -92,7 +90,8 @@ const RoomList = () => {
         </table>
       </div>
     </div>
-  );
+  </div>
+);
 };
 
 export default RoomList;

@@ -6,20 +6,21 @@ function App() {
   const handleRoomAdded = () => {
     window.location.reload();
   };
-
-  return (
-    <div className="container mt-5">
-      <h1 className="text-center mb-4">Sistem Peminjaman Ruangan</h1>
-      
-      {/* Tampilkan Tabel Ruangan */}
-      <RoomList />
-      
-      {/* Tampilkan Form Tambah Ruangan di bawahnya */}
-      <div className="mt-5">
-        <RoomForm onRoomAdded={handleRoomAdded} />
-      </div>
-    </div>
-  );
+    return (
+        <div className="container py-5 text-center">
+          {/* Judul dengan kotak cembung transparan */}
+          <div className="glass-header">
+            <h1 className="fw-bold mb-0" style={{ color: '#2c3e50', letterSpacing: '-1px' }}>
+              Sistem Peminjaman Ruangan
+            </h1>
+          </div>
+          
+          <RoomList />
+          <div className="mt-5">
+            <RoomForm onRoomAdded={handleRoomAdded} />
+          </div>
+        </div>
+      );
 }
 
 export default App;
