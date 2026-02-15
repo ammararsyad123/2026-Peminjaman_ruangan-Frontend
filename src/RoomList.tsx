@@ -17,14 +17,38 @@ const RoomList = () => {
       .catch(err => console.error("Error ambil data:", err));
   }, []);
 
-  return (
-    <div>
-      <h3>Daftar Ruangan PENS</h3>
-      <ul>
-        {rooms.map(r => <li key={r.id}>{r.name} - {r.location}</li>)}
-      </ul>
+return (
+  <div className="container mt-5">
+    <div className="card shadow">
+      <div className="card-header bg-primary text-white">
+        <h3 className="mb-0">Daftar Ruangan PENS</h3>
+      </div>
+      <div className="card-body">
+        <table className="table table-hover table-striped">
+          <thead className="table-dark">
+            <tr>
+              <th>ID</th>
+              <th>Nama Ruangan</th>
+              <th>Lokasi</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rooms.map((room) => (
+              <tr key={room.id}>
+                <td>{room.id}</td>
+                <td>{room.name}</td>
+                <td>{room.location}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {rooms.length === 0 && (
+          <p className="text-center text-muted">Data ruangan tidak ditemukan.</p>
+        )}
+      </div>
     </div>
-  );
+  </div>
+);
 };
 
 export default RoomList;
