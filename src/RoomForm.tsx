@@ -11,16 +11,15 @@ const RoomForm = ({ onRoomAdded }: { onRoomAdded: () => void }) => {
       .then(() => {
         alert("Ruangan berhasil ditambah!");
         setName(''); setLocation('');
-        onRoomAdded(); // Memperbarui tabel secara otomatis
+        onRoomAdded(); 
       })
       .catch(err => console.error(err));
   };
-
-  // Ganti bagian return di RoomForm.tsx:
+  
         return (
         <div className="card border-0 shadow-sm" style={{ borderRadius: '15px' }}>
             <div className="card-body p-4">
-            <h5 className="fw-bold mb-4" style={{ color: '#4a90e2' }}>Tambah Ruangan Baru</h5>
+            <h5 className="fw-bold mb-4" style={{ color: '#166534' }}>Tambah Ruangan Baru</h5>
             <form onSubmit={handleSubmit}>
                 <div className="row g-3">
                 <div className="col-md-6">
@@ -32,8 +31,14 @@ const RoomForm = ({ onRoomAdded }: { onRoomAdded: () => void }) => {
                     <input type="text" className="form-control bg-light border-0 py-2" style={{ borderRadius: '10px' }} value={location} onChange={(e) => setLocation(e.target.value)} required />
                 </div>
                 <div className="col-12 mt-4">
-                    <button type="submit" className="btn btn-primary w-100 py-2 fw-bold shadow" style={{ borderRadius: '10px', background: 'linear-gradient(45deg, #4a90e2, #50a7f5)' }}>
-                    Simpan Ruangan
+                    <button 
+                    type="submit" 
+                    className="btn btn-success w-100 py-2 fw-bold shadow-sm" 
+                    style={{ 
+                        borderRadius: '10px', 
+                        background: 'linear-gradient(45deg, #166534, #22c55e)', // Hijau Tua ke Hijau Terang
+                        border: 'none' 
+                    }}> Simpan Ruangan
                     </button>
                 </div>
                 </div>

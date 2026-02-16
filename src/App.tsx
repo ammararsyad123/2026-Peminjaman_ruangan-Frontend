@@ -1,6 +1,7 @@
 import RoomList from './RoomList';
 import RoomForm from './RoomForm';
 import ReservationForm from './ReservationForm';
+import HistoryTable from './HistoryTable'; // 1. Tambahkan Import ini
 
 function App() {
   const handleRefresh = () => window.location.reload();
@@ -11,13 +12,11 @@ function App() {
         <h1>Sistem Peminjaman Ruangan</h1>
       </div>
       
-      {/* 1. Tabel Utama */}
       <RoomList />
-
-      {/* 2. Form Transaksi Pinjam */}
       <ReservationForm onReserved={handleRefresh} />
+      
+      <HistoryTable /> 
 
-      {/* 3. Form Master Data (Tambah Ruangan) */}
       <div className="mt-5">
         <RoomForm onRoomAdded={handleRefresh} />
       </div>

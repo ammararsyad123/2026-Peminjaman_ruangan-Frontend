@@ -11,7 +11,6 @@ interface Room {
 const RoomList = () => {
   const [rooms, setRooms] = useState<Room[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<'all' | 'tersedia' | 'dipinjam'>('all');
 
   useEffect(() => {
     fetchRooms();
@@ -24,9 +23,8 @@ const RoomList = () => {
   };
 
   const filteredRooms = rooms.filter(room => {
-    const matchesSearch = room.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          room.location.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesSearch;
+    return room.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+           room.location.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
   const deleteRoom = (id: number) => {
@@ -42,7 +40,7 @@ const RoomList = () => {
   };
 
   const resetBooking = (id: number) => {
-    if (window.confirm("Kosongkan semua jadwal booking untuk ruangan ini?")) {
+    if (window.confirm("Kosongkan semua jadwal booking?")) {
       localStorage.removeItem(`booking_info_${id}`);
       fetchRooms();
     }
@@ -74,7 +72,7 @@ const RoomList = () => {
               <tr>
                 <th className="px-4 py-3 border-0 text-muted small text-uppercase text-start">Nama Ruangan</th>
                 <th className="py-3 border-0 text-muted small text-uppercase text-start">Lokasi</th>
-                <th className="py-3 border-0 text-muted small text-uppercase text-center">Informasi Booking</th>
+                <th className="py-3 border-0 text-muted small text-uppercase text-center" style={{ width: '300px' }}>Informasi Booking & Peminjam</th>
                 <th className="py-3 border-0 text-muted small text-uppercase text-center">Status</th>
                 <th className="py-3 border-0 text-muted small text-uppercase text-center">Aksi</th>
               </tr>
@@ -84,13 +82,11 @@ const RoomList = () => {
                 <tr key={room.id} className="align-middle">
                   <td className="px-4 py-3 fw-semibold text-start">{room.name}</td>
                   <td className="py-3 text-secondary text-start">{room.location}</td>
-                  
-                  {/* REVISI: Menampilkan LIST Jadwal yang sudah masuk */}
                   <td className="py-3 text-center">
                     {localStorage.getItem(`booking_info_${room.id}`) ? (
                       <div className="small">
                         <span className="badge bg-success-subtle text-success d-block mb-1">Terjadwal</span>
-                        <div className="text-muted fw-normal" style={{ fontSize: '10px', maxWidth: '180px', margin: '0 auto', lineHeight: '1.4' }}>
+                        <div className="text-muted fw-normal" style={{ fontSize: '10px', maxWidth: '280px', margin: '0 auto', lineHeight: '1.4' }}>
                           {localStorage.getItem(`booking_info_${room.id}`)}
                         </div>
                       </div>
@@ -98,7 +94,6 @@ const RoomList = () => {
                       <span className="text-success small fw-bold">Siap di Booking</span>
                     )}
                   </td>
-
                   <td className="py-3 text-center">
                     <span className="badge rounded-pill px-3 py-2 bg-success-subtle text-success" style={{ fontSize: '0.75rem' }}>
                       ● Aktif
@@ -106,7 +101,7 @@ const RoomList = () => {
                   </td>
                   <td className="py-3 text-center">
                     <button className="btn btn-light btn-sm me-2 shadow-sm rounded-3 fw-bold text-warning" onClick={() => resetBooking(room.id)}>
-                      Reset Jadwal
+                      Reset
                     </button>
                     <button className="btn btn-outline-danger btn-sm rounded-3" onClick={() => deleteRoom(room.id)}>
                       Hapus
