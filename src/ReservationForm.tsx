@@ -9,8 +9,9 @@ const ReservationForm = ({ onReserved }: { onReserved: () => void }) => {
   const [time, setTime] = useState('');
 
   useEffect(() => {
+    // REVISI: Ambil semua ruangan agar bisa di-booking berkali-kali
     axios.get('http://localhost:5025/api/Rooms')
-      .then(res => setRooms(res.data.filter((r: any) => r.capacity > 0)))
+      .then(res => setRooms(res.data))
       .catch(err => console.error(err));
   }, []);
 
@@ -19,33 +20,33 @@ const ReservationForm = ({ onReserved }: { onReserved: () => void }) => {
     const roomToBook = rooms.find(r => r.id === parseInt(selectedRoomId));
 
     if (roomToBook) {
-      axios.put(`http://localhost:5025/api/Rooms/${roomToBook.id}`, { 
-        ...roomToBook,
-        capacity: 0 
-      })
-      .then(() => {
-        // Simpan info waktu agar tabel bisa menampilkan data yang sesuai input
-        localStorage.setItem(`booking_info_${roomToBook.id}`, `${date} | ${time}`);
-        
-        alert(`Berhasil! ${userName} telah membooking ${roomToBook.name} untuk tanggal ${date} pukul ${time}`);
-        onReserved(); 
-        
-        setUserName('');
-        setSelectedRoomId('');
-        setDate('');
-        setTime('');
-      })
-      .catch(err => {
-        console.error("Gagal booking:", err);
-        alert("Terjadi kesalahan saat menghubungi server.");
-      });
+      // REVISI: Logika menggabungkan (concatenate) jadwal lama dengan yang baru
+      const existingBookings = localStorage.getItem(`booking_info_${roomToBook.id}`) || "";
+      const newBooking = `${date} (${time})`;
+      const updatedBookings = existingBookings 
+        ? `${existingBookings} | ${newBooking}` 
+        : newBooking;
+
+      // Simpan ke localStorage (Aman & Persisten di browser)
+      localStorage.setItem(`booking_info_${roomToBook.id}`, updatedBookings);
+      
+      alert(`Berhasil! ${userName} telah membooking ${roomToBook.name} untuk slot ${newBooking}`);
+      
+      // Memicu refresh tampilan
+      onReserved(); 
+      
+      // Reset input form
+      setUserName('');
+      setSelectedRoomId('');
+      setDate('');
+      setTime('');
     }
   };
 
   return (
     <div className="card border-0 shadow-sm mt-4 text-start" style={{ borderRadius: '15px' }}>
       <div className="card-body p-4">
-        <h5 className="fw-bold mb-4" style={{ color: '#166534' }}>Form Pinjam Ruangan</h5>
+        <h5 className="fw-bold mb-4" style={{ color: '#166534' }}>Form Pinjam Ruangan (Multi-Slot)</h5>
         <form onSubmit={handleReserve}>
           <div className="row g-3">
             <div className="col-md-3">
